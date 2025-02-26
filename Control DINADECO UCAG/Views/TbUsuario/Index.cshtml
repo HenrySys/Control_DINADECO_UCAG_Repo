@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Control_DINADECO_UCAG.Models.TbUsuario>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<head>
+    <link href="~/css/Tablas.css" rel="stylesheet" asp-append-version="true" />
+</head>
+
+
+<div class="containerH">
+
+<h1>Usuarios</h1>
+
+<p>
+        <a asp-action="Create" class="btn btn-dark">Crear Usuario</a>
+</p>
+<table class="table" id="TableUsuarios">
+    <thead>
+        <tr>
+            <th>
+                    <label>Nombre de usuario</label>
+
+            </th>
+            
+            <th>
+                    <label>Tipo de usuario</label>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Correo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreUsuario)
+            </td>
+            
+            <td>
+                        @item.IdRolNavigation?.Descripcion
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Correo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                        <a asp-action="Edit" asp-route-id="@item.IdUser" style="color: #000;" ><i class="fa-regular fa-pen-to-square"></i></a>
+                        <a asp-action="Details" asp-route-id="@item.IdUser" style="color: #000;"><i class="fa-solid fa-circle-info"></i></a>
+                        <a asp-action="Delete" asp-route-id="@item.IdUser" style="color: #000;" ><i class="fa-solid fa-trash"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+</div>
+
+@section scripts {
+    <script>
+        let table = new DataTable('#TableUsuarios', {
+            "language": {
+                "decimal": "",
+                "emptyTable": "No hay registros",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+            "width": "100%"
+        });
+    </script>
+}

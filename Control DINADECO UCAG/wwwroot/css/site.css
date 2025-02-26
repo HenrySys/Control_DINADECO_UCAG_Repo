@@ -1,0 +1,99 @@
+
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Cormorant:ital,wght@0,300..700;1,300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Tulpen+One&family=Yantramanav:wght@100;300;400;500;700;900&display=swap');
+
+body {
+    background: #F0F0F0;
+    height: auto;
+    min-width: 100%;
+}
+
+@media (max-width: 991px) {
+    .sidebar {
+        background-color: rgba(255, 255, 255, 0.648);
+        backdrop-filter: blur(10px);
+    }
+}
+
+nav.active {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    padding: 15px;
+}
+
+.logo {
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: rgba(0, 0, 0, 100);
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+    .logo:hover {
+        color: rgba(255, 120, 44, 1);
+        transition: color 0.3s ease; 
+    }
+
+.nav-link {
+    font-family: "Inter", sans-serif;
+    font-size: 0.9rem;
+}
+
+    .nav-link:hover {
+        color: rgba(255, 120, 44, 1);
+        transition: color 0.3s ease;
+    }
+
+
+.login-btn {
+    background-color: #FF7F32;
+    border: none;
+    color: white;
+    font-weight: 600;
+    font-size: 17px;
+    box-shadow: 13px 13px 100px #969696, -13px -13px 100px #ffffff;
+    transition: all 250ms ease;
+    overflow: hidden;
+    width: 100%;
+}
+
+.login-btn:hover {
+    background-color: #FF5C00; 
+    transform: scale(1.05);
+    box-shadow: 13px 13px 100px #969696, -13px -13px 100px #ffffff;
+}
+
+
+.card {
+    background: #F8F9FD;
+    background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(244, 247, 251) 100%);
+    border-radius: 40px;
+    padding: 25px 35px;
+    border: 5px solid rgb(255, 255, 255);
+    box-shadow: rgba(170, 170, 170, 0.8784313725) 0px 30px 30px -5px;
+}
+
+
+.form-control {
+    border-radius: 15px;
+    padding: 1em;
+    background-color: #e8e8e8;
+    box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.3);
+    transition: 300ms ease-in-out;
+    margin-bottom: 25px;
+}
+
+    .form-control:focus {
+        background-color: white;
+        transform: scale(1.05);
+        box-shadow: 13px 13px 100px #969696, -13px -13px 100px #ffffff;
+    }
+
+
+.card-header h3 {
+    font-family: "Six Caps", sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: #000;
+}

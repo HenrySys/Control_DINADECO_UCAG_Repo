@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Control DINADECO UCAG", "Control DINADECO UCAG\Control DINADECO UCAG.csproj", "{E8EC4F26-60ED-48F7-BDE9-0AC4927C8830}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PruebasUnitariasProyecto", "PruebasUnitariasProyecto\PruebasUnitariasProyecto.csproj", "{F4ABFFCD-3AEB-4CBC-A4AB-CFD0FC4D34D9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E8EC4F26-60ED-48F7-BDE9-0AC4927C8830}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8EC4F26-60ED-48F7-BDE9-0AC4927C8830}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8EC4F26-60ED-48F7-BDE9-0AC4927C8830}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8EC4F26-60ED-48F7-BDE9-0AC4927C8830}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4ABFFCD-3AEB-4CBC-A4AB-CFD0FC4D34D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4ABFFCD-3AEB-4CBC-A4AB-CFD0FC4D34D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4ABFFCD-3AEB-4CBC-A4AB-CFD0FC4D34D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4ABFFCD-3AEB-4CBC-A4AB-CFD0FC4D34D9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {43E4110C-D37A-4400-A9A2-F3FE462E5F75}
+	EndGlobalSection
+EndGlobal
