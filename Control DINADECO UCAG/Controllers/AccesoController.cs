@@ -46,7 +46,7 @@ namespace Control_DINADECO_UCAG.Controllers
             {
                 NombreUsuario = modelo.NombreUsuario,
                 Contraseña = _hashingService.GenerateHash(modelo.Contraseña),
-                IdRol= 3, //el rol 3 pertenece a usuario
+                Rol= 3, //el rol 3 pertenece a usuario
                 Correo = modelo.Correo,
                 Estado = "activo"
             };
@@ -55,7 +55,7 @@ namespace Control_DINADECO_UCAG.Controllers
             {
                 var nombreUsuario = usuario.NombreUsuario;
                 var contraseña = usuario.Contraseña;
-                var idRol = usuario.IdRol;
+                var idRol = usuario.Rol;
                 var correo = usuario.Correo;
                 var estado = usuario.Estado;
 

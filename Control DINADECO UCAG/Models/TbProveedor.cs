@@ -9,23 +9,27 @@ public partial class TbProveedor
 
     public int? IdAsociacion { get; set; }
 
-    public string? Nombre { get; set; }
+    public string TipoProveedor { get; set; } = "Juridico";
 
-    public string? Cedula { get; set; }
+    public string Nombre_Empresa { get; set; } = null!;
 
-    public string? Direccion { get; set; }
+    public string CedulaJudirica { get; set; } = null!;
 
-    public string? Telefono { get; set; }
+    public string NombreContacto { get; set; } = null!;
+
+    public string CedulaContacto { get; set; } = null!;
+
+    public string Direccion { get; set; } = null!;
+
+    public string Telefono { get; set; } = null!;
 
     public string? Fax { get; set; }
 
     public string? Correo { get; set; }
 
-    public string? Estado { get; set; }
+    public string Estado { get; set; } = "Activo";
 
     public virtual TbAsociacion? IdAsociacionNavigation { get; set; }
 
-    public virtual ICollection<TbCheque> TbCheques { get; set; } = new List<TbCheque>();
-
-    public virtual ICollection<TbFactura> TbFacturas { get; set; } = new List<TbFactura>();
+    public virtual ICollection<TbMovimiento> TbMovimientos { get; set; } = new List<TbMovimiento>();
 }

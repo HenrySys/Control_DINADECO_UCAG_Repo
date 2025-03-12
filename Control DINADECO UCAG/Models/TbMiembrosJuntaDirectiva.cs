@@ -13,7 +13,7 @@ public partial class TbMiembrosJuntaDirectiva
 
     public int? IdPuesto { get; set; }
 
-    public string? Estado { get; set; }
+    public string? Estado { get; set; } = "Activo";
 
     public virtual TbAsociado? IdAsociadoNavigation { get; set; }
 

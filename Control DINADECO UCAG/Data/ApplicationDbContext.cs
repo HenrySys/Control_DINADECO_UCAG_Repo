@@ -19,55 +19,34 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<TbActum> TbActa { get; set; }
 
+    public virtual DbSet<TbActaAsistencia> TbActaAsistencias { get; set; }
+
     public virtual DbSet<TbAcuerdo> TbAcuerdos { get; set; }
 
     public virtual DbSet<TbAsociacion> TbAsociacions { get; set; }
 
-    public virtual DbSet<TbAsociacionWeb> TbAsociacionWebs { get; set; }
-
     public virtual DbSet<TbAsociado> TbAsociados { get; set; }
 
-    public virtual DbSet<TbAtractivo> TbAtractivos { get; set; }
-
-    public virtual DbSet<TbCheque> TbCheques { get; set; }
+    public virtual DbSet<TbCategoriaMovimiento> TbCategoriaMovimientos { get; set; }
 
     public virtual DbSet<TbCliente> TbClientes { get; set; }
 
-    public virtual DbSet<TbConcepto> TbConceptos { get; set; }
-
-    public virtual DbSet<TbCuentum> TbCuenta { get; set; }
-
-    public virtual DbSet<TbDetalleEgreso> TbDetalleEgresos { get; set; }
-
-    public virtual DbSet<TbDetalleFactura> TbDetalleFacturas { get; set; }
-
-    public virtual DbSet<TbDetalleIngreso> TbDetalleIngresos { get; set; }
-
-    public virtual DbSet<TbDocumento> TbDocumentos { get; set; }
-
-    public virtual DbSet<TbFactura> TbFacturas { get; set; }
-
-    public virtual DbSet<TbFoto> TbFotos { get; set; }
-
-    public virtual DbSet<TbInformeEconomico> TbInformeEconomicos { get; set; }
+    public virtual DbSet<TbCuenta> TbCuenta { get; set; }
 
     public virtual DbSet<TbJuntaDirectiva> TbJuntaDirectivas { get; set; }
 
     public virtual DbSet<TbMiembrosJuntaDirectiva> TbMiembrosJuntaDirectivas { get; set; }
 
-    public virtual DbSet<TbMovimientoEgreso> TbMovimientoEgresos { get; set; }
-
-    public virtual DbSet<TbMovimientoIngreso> TbMovimientoIngresos { get; set; }
+    public virtual DbSet<TbMovimiento> TbMovimiento { get; set; }
 
     public virtual DbSet<TbProveedor> TbProveedors { get; set; }
 
-    public virtual DbSet<TbPuesto> TbPuestos { get; set; }
+    public virtual DbSet<TbProyecto> TbProyectos { get; set; }
 
-    public virtual DbSet<TbTipoMovimiento> TbTipoMovimientos { get; set; }
+    public virtual DbSet<TbPuesto> TbPuestos { get; set; }
 
     public virtual DbSet<TbUsuario> TbUsuarios { get; set; }
 
-    public virtual DbSet<TbRol> TbRols { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseMySql("name=DefaultConnection", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.32-mariadb"));
@@ -102,18 +81,15 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.IdAsociado)
                 .HasColumnType("int(11)")
                 .HasColumnName("id_asociado");
-            entity.Property(e => e.IdConcepto)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_concepto");
-            entity.Property(e => e.Monto)
-                .HasPrecision(6, 2)
-                .HasColumnName("monto");
+            entity.Property(e => e.MontoTotalAcordado)
+                .HasPrecision(10, 2)
+                .HasColumnName("monto_total_acordado");
             entity.Property(e => e.NumeroActa)
                 .HasMaxLength(20)
                 .HasColumnName("numero_acta");
-            entity.Property(e => e.Observacion)
+            entity.Property(e => e.Descripcion)
                 .HasMaxLength(320)
-                .HasColumnName("observacion");
+                .HasColumnName("descripcion");
 
             entity.HasOne(d => d.IdAsociacionNavigation).WithMany(p => p.TbActa)
                 .HasForeignKey(d => d.IdAsociacion)
@@ -136,17 +112,21 @@ public partial class ApplicationDbContext : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("id_acuerdo");
             entity.Property(e => e.Descripcion)
-                .HasMaxLength(300)
+                .HasMaxLength(500)
                 .HasColumnName("descripcion");
             entity.Property(e => e.IdActa)
                 .HasColumnType("int(11)")
                 .HasColumnName("id_acta");
             entity.Property(e => e.Nombre)
-                .HasMaxLength(30)
+                .HasMaxLength(100)
                 .HasColumnName("nombre");
             entity.Property(e => e.NumeroAcuerdo)
                 .HasMaxLength(10)
                 .HasColumnName("numero_acuerdo");
+            entity.Property(e => e.MontoAcuerdo)
+                .HasPrecision(10, 2)
+                .HasColumnName("monto_acuerdo");
+
 
             entity.HasOne(d => d.IdActaNavigation).WithMany(p => p.TbAcuerdos)
                 .HasForeignKey(d => d.IdActa)
@@ -203,33 +183,11 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Telefono)
                 .HasMaxLength(30)
                 .HasColumnName("telefono");
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(500)
+                .HasColumnName("descripcion");
         });
 
-        modelBuilder.Entity<TbAsociacionWeb>(entity =>
-        {
-            entity.HasKey(e => e.IdAsocWeb).HasName("PRIMARY");
-
-            entity.ToTable("tb_asociacion_web");
-
-            entity.HasIndex(e => e.IdAsociacion, "id_asociacion");
-
-            entity.Property(e => e.IdAsocWeb)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_asoc_web");
-            entity.Property(e => e.IdAsociacion)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_asociacion");
-            entity.Property(e => e.Latitud)
-                .HasMaxLength(30)
-                .HasColumnName("latitud");
-            entity.Property(e => e.Longitud)
-                .HasMaxLength(30)
-                .HasColumnName("longitud");
-
-            entity.HasOne(d => d.IdAsociacionNavigation).WithMany(p => p.TbAsociacionWebs)
-                .HasForeignKey(d => d.IdAsociacion)
-                .HasConstraintName("tb_asociacion_web_ibfk_1");
-        });
 
         modelBuilder.Entity<TbAsociado>(entity =>
         {
@@ -239,9 +197,14 @@ public partial class ApplicationDbContext : DbContext
 
             entity.HasIndex(e => e.IdAsociacion, "id_asociacion");
 
+            entity.HasIndex(e => e.IdUsuario, "id_usuario");
+
             entity.Property(e => e.IdAsociado)
                 .HasColumnType("int(11)")
                 .HasColumnName("id_asociado");
+            entity.Property(e => e.IdUsuario)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_usuario");
             entity.Property(e => e.Apellido1)
                 .HasMaxLength(30)
                 .HasColumnName("apellido_1");
@@ -279,87 +242,59 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Telefono)
                 .HasMaxLength(25)
                 .HasColumnName("telefono");
+            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.TbAsociados)
+                .HasForeignKey(d => d.IdUsuario)
+                .HasConstraintName("fk_Usuario_Asociados");
 
             entity.HasOne(d => d.IdAsociacionNavigation).WithMany(p => p.TbAsociados)
                 .HasForeignKey(d => d.IdAsociacion)
                 .HasConstraintName("tb_asociado_ibfk_1");
         });
 
-        modelBuilder.Entity<TbAtractivo>(entity =>
+        modelBuilder.Entity<TbCategoriaMovimiento>(entity =>
         {
-            entity.HasKey(e => e.IdAtractivos).HasName("PRIMARY");
+            entity.HasKey(e => e.IdCategoriaMovimiento).HasName("PRIMARY");
 
-            entity.ToTable("tb_atractivos");
+            entity.ToTable("tb_categoria_movimiento");
 
-            entity.HasIndex(e => e.IdAsocWeb, "id_asoc_web");
+            entity.HasIndex(e => e.IdAsociacion, "id_asociacion");
 
-            entity.Property(e => e.IdAtractivos)
+            entity.HasIndex(e => e.IdAsociado, "id_asociado");
+
+            entity.Property(e => e.IdCategoriaMovimiento)
                 .HasColumnType("int(11)")
-                .HasColumnName("id_atractivos");
-            entity.Property(e => e.Descripcion)
-                .HasMaxLength(500)
-                .HasColumnName("descripcion");
-            entity.Property(e => e.Estado)
+                .HasColumnName("id_categoria_movimiento");
+            entity.Property(e => e.IdAsociacion)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_asociacion");
+            entity.Property(e => e.IdAsociado)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_asociado");
+            entity.Property(e => e.TipoMovimiento)
                 .HasMaxLength(20)
-                .HasColumnName("estado");
-            entity.Property(e => e.IdAsocWeb)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_asoc_web");
-            entity.Property(e => e.Latitud)
-                .HasMaxLength(30)
-                .HasColumnName("latitud");
-            entity.Property(e => e.Longitud)
-                .HasMaxLength(30)
-                .HasColumnName("longitud");
-            entity.Property(e => e.Tipo)
-                .HasMaxLength(30)
-                .HasColumnName("tipo");
-
-            entity.HasOne(d => d.IdAsocWebNavigation).WithMany(p => p.TbAtractivos)
-                .HasForeignKey(d => d.IdAsocWeb)
-                .HasConstraintName("tb_atractivos_ibfk_1");
-        });
-
-        modelBuilder.Entity<TbCheque>(entity =>
-        {
-            entity.HasKey(e => e.IdCheque).HasName("PRIMARY");
-
-            entity.ToTable("tb_cheque");
-
-            entity.HasIndex(e => e.IdCuenta, "id_cuenta");
-
-            entity.HasIndex(e => e.IdGirado, "id_girado");
-
-            entity.HasIndex(e => e.NoCheque, "no_cheque").IsUnique();
-
-            entity.Property(e => e.IdCheque)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_cheque");
-            entity.Property(e => e.Estado)
+                .HasColumnName("tipoMovimiento");
+            entity.Property(e => e.TipoCategoria)
                 .HasMaxLength(20)
-                .HasColumnName("estado");
-            entity.Property(e => e.Fecha).HasColumnName("fecha");
-            entity.Property(e => e.IdCuenta)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_cuenta");
-            entity.Property(e => e.IdGirado)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_girado");
-            entity.Property(e => e.Monto)
-                .HasPrecision(9, 2)
-                .HasColumnName("monto");
-            entity.Property(e => e.NoCheque)
-                .HasColumnType("int(11)")
-                .HasColumnName("no_cheque");
+                .HasColumnName("tipo_categoria");
+            entity.Property(e => e.NombreCategoria)
+                .HasMaxLength(25)
+                .HasColumnName("nombre_categoria");
+            entity.Property(e => e.DescripcionCategoria)
+                .HasMaxLength(25)
+                .HasColumnName("descripcion_categoria");
 
-            entity.HasOne(d => d.IdCuentaNavigation).WithMany(p => p.TbCheques)
-                .HasForeignKey(d => d.IdCuenta)
-                .HasConstraintName("tb_cheque_ibfk_1");
+            entity.HasOne(d => d.IdAsociacionNavigation).WithMany(p => p.TbCategoriaMovimientos)
+                .HasForeignKey(d => d.IdAsociacion)
+                .HasConstraintName("fk_asociacion_categoria");
 
-            entity.HasOne(d => d.IdGiradoNavigation).WithMany(p => p.TbCheques)
-                .HasForeignKey(d => d.IdGirado)
-                .HasConstraintName("tb_cheque_ibfk_2");
-        });
+            entity.HasOne(d => d.IdAsociadoNavigation).WithMany(p => p.TbCategoriaMovimientos)
+                .HasForeignKey(d => d.IdAsociado)
+                .HasConstraintName("fk_asociado_categoria");
+
+
+        }
+        );
+
 
         modelBuilder.Entity<TbCliente>(entity =>
         {
@@ -367,9 +302,15 @@ public partial class ApplicationDbContext : DbContext
 
             entity.ToTable("tb_cliente");
 
+            entity.HasIndex(e => e.IdAsociacion, "id_asociacion");
+
             entity.Property(e => e.IdCliente)
                 .HasColumnType("int(11)")
                 .HasColumnName("id_cliente");
+            entity.Property(e => e.IdAsociacion)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_asociacion");
+
             entity.Property(e => e.Apellido1)
                 .HasMaxLength(50)
                 .HasColumnName("apellido_1");
@@ -391,36 +332,21 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Telefono)
                 .HasMaxLength(25)
                 .HasColumnName("telefono");
-        });
-
-        modelBuilder.Entity<TbConcepto>(entity =>
-        {
-            entity.HasKey(e => e.IdConcepto).HasName("PRIMARY");
-
-            entity.ToTable("tb_concepto");
-
-            entity.HasIndex(e => e.IdAsociacion, "id_asociacion");
-
-            entity.Property(e => e.IdConcepto)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_concepto");
-            entity.Property(e => e.Aplicacion2).HasColumnName("aplicacion_2");
-            entity.Property(e => e.Descripcion)
-                .HasMaxLength(60)
-                .HasColumnName("descripcion");
+            entity.Property(e => e.Cedula)
+                .HasMaxLength(50)
+                .HasColumnName("cedula");
             entity.Property(e => e.Estado)
                 .HasMaxLength(20)
                 .HasColumnName("estado");
-            entity.Property(e => e.IdAsociacion)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_asociacion");
 
-            entity.HasOne(d => d.IdAsociacionNavigation).WithMany(p => p.TbConceptos)
+
+            entity.HasOne(d => d.IdAsociacionNavigation).WithMany(p => p.TbClientes)
                 .HasForeignKey(d => d.IdAsociacion)
-                .HasConstraintName("tb_concepto_ibfk_1");
+                .HasConstraintName("fk_tb_cliente_tb_asociacion");
         });
 
-        modelBuilder.Entity<TbCuentum>(entity =>
+
+        modelBuilder.Entity<TbCuenta>(entity =>
         {
             entity.HasKey(e => e.IdCuenta).HasName("PRIMARY");
 
@@ -442,273 +368,62 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.NumeroCuenta)
                 .HasColumnType("int(11)")
                 .HasColumnName("numero_cuenta");
-            entity.Property(e => e.Saldo)
-                .HasPrecision(12, 2)
-                .HasColumnName("saldo");
-            entity.Property(e => e.Tipo)
+            entity.Property(e => e.Telefono)
+                .HasMaxLength(50)
+                .HasColumnName("telefono");
+            entity.Property(e => e.TituloCuenta)
                 .HasMaxLength(30)
-                .HasColumnName("tipo");
+                .HasColumnName("titulo_cuenta");
+            entity.Property(e => e.TipoCuenta)
+                .HasMaxLength(30)
+                .HasColumnName("tipo_cuenta");
 
             entity.HasOne(d => d.IdAsociacionNavigation).WithMany(p => p.TbCuenta)
                 .HasForeignKey(d => d.IdAsociacion)
-                .HasConstraintName("tb_cuenta_ibfk_1");
+                .HasConstraintName("fk_tb_cuenta_id_asociacion");
         });
 
-        modelBuilder.Entity<TbDetalleEgreso>(entity =>
+        modelBuilder.Entity<TbDetalleMovimiento>(entity => 
         {
-            entity.HasKey(e => e.IdDetalleEgreso).HasName("PRIMARY");
+            entity.HasKey(e => e.IdDetalleMovimiento).HasName("PRIMARY");
 
-            entity.ToTable("tb_detalle_egreso");
+            entity.ToTable("tb_detalle_movimiento");
 
-            entity.HasIndex(e => e.IdInformeEconomico, "id_informe_economico");
+            entity.HasIndex(e => e.IdMovimiento, "id_movimiento");
 
-            entity.HasIndex(e => e.IdMovimientoEgreso, "id_movimiento_egreso");
+            entity.HasIndex(e => e.IdAcuerdo, "id_acuerdo");
 
-            entity.Property(e => e.IdDetalleEgreso)
+            entity.Property(e => e.IdDetalleMovimiento)
                 .HasColumnType("int(11)")
-                .HasColumnName("id_detalle_egreso");
-            entity.Property(e => e.IdInformeEconomico)
+                .HasColumnName("id_detalle_movimiento");
+            entity.Property(e => e.IdMovimiento)
                 .HasColumnType("int(11)")
-                .HasColumnName("id_informe_economico");
-            entity.Property(e => e.IdMovimientoEgreso)
+                .HasColumnName("id_movimiento");
+            entity.Property(e => e.IdAcuerdo)
                 .HasColumnType("int(11)")
-                .HasColumnName("id_movimiento_egreso");
-            entity.Property(e => e.Total)
-                .HasPrecision(6, 2)
-                .HasColumnName("total");
-
-            entity.HasOne(d => d.IdInformeEconomicoNavigation).WithMany(p => p.TbDetalleEgresos)
-                .HasForeignKey(d => d.IdInformeEconomico)
-                .HasConstraintName("tb_detalle_egreso_ibfk_2");
-
-            entity.HasOne(d => d.IdMovimientoEgresoNavigation).WithMany(p => p.TbDetalleEgresos)
-                .HasForeignKey(d => d.IdMovimientoEgreso)
-                .HasConstraintName("tb_detalle_egreso_ibfk_1");
-        });
-
-        modelBuilder.Entity<TbDetalleFactura>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("tb_detalle_factura");
-
-            entity.HasIndex(e => e.IdFactura, "id_factura");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("id");
-            entity.Property(e => e.Cantidad)
-                .HasPrecision(6, 2)
-                .HasColumnName("cantidad");
-            entity.Property(e => e.Descripcion)
-                .HasMaxLength(60)
-                .HasColumnName("descripcion");
-            entity.Property(e => e.IdFactura)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_factura");
-            entity.Property(e => e.MontoTotal)
-                .HasPrecision(6, 2)
-                .HasColumnName("monto_total");
-            entity.Property(e => e.PrecioUnitario)
-                .HasPrecision(6, 2)
-                .HasColumnName("precio_unitario");
-
-            entity.HasOne(d => d.IdFacturaNavigation).WithMany(p => p.TbDetalleFacturas)
-                .HasForeignKey(d => d.IdFactura)
-                .HasConstraintName("tb_detalle_factura_ibfk_1");
-        });
-
-        modelBuilder.Entity<TbDetalleIngreso>(entity =>
-        {
-            entity.HasKey(e => e.IdDetalleIngreso).HasName("PRIMARY");
-
-            entity.ToTable("tb_detalle_ingreso");
-
-            entity.HasIndex(e => e.IdInformeEconomico, "id_informe_economico");
-
-            entity.HasIndex(e => e.IdMovimientoIngreso, "id_movimiento_ingreso");
-
-            entity.Property(e => e.IdDetalleIngreso)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_detalle_ingreso");
-            entity.Property(e => e.IdInformeEconomico)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_informe_economico");
-            entity.Property(e => e.IdMovimientoIngreso)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_movimiento_ingreso");
-            entity.Property(e => e.Total)
-                .HasPrecision(8, 2)
-                .HasColumnName("total");
-
-            entity.HasOne(d => d.IdInformeEconomicoNavigation).WithMany(p => p.TbDetalleIngresos)
-                .HasForeignKey(d => d.IdInformeEconomico)
-                .HasConstraintName("tb_detalle_ingreso_ibfk_2");
-
-            entity.HasOne(d => d.IdMovimientoIngresoNavigation).WithMany(p => p.TbDetalleIngresos)
-                .HasForeignKey(d => d.IdMovimientoIngreso)
-                .HasConstraintName("tb_detalle_ingreso_ibfk_1");
-        });
-
-        modelBuilder.Entity<TbDocumento>(entity =>
-        {
-            entity.HasKey(e => e.IdDocumento).HasName("PRIMARY");
-
-            entity.ToTable("tb_documento");
-
-            entity.HasIndex(e => e.IdAsociacion, "id_asociacion");
-
-            entity.HasIndex(e => e.IdFactura, "id_factura");
-
-            entity.Property(e => e.IdDocumento)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_documento");
-            entity.Property(e => e.Descripcion)
-                .HasMaxLength(120)
-                .HasColumnName("descripcion");
-            entity.Property(e => e.Estado)
+                .HasColumnName("id_acuerdo");
+            entity.Property(e => e.TipoMovimiento)
                 .HasMaxLength(20)
-                .HasColumnName("estado");
-            entity.Property(e => e.FechaPago).HasColumnName("fecha_pago");
-            entity.Property(e => e.IdAsociacion)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_asociacion");
-            entity.Property(e => e.IdFactura)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_factura");
-            entity.Property(e => e.NumeroDocumento)
-                .HasMaxLength(30)
-                .HasColumnName("numero_documento");
-            entity.Property(e => e.Total)
-                .HasPrecision(9, 2)
-                .HasColumnName("total");
-
-            entity.HasOne(d => d.IdAsociacionNavigation).WithMany(p => p.TbDocumentos)
-                .HasForeignKey(d => d.IdAsociacion)
-                .HasConstraintName("tb_documento_ibfk_2");
-
-            entity.HasOne(d => d.IdFacturaNavigation).WithMany(p => p.TbDocumentos)
-                .HasForeignKey(d => d.IdFactura)
-                .HasConstraintName("tb_documento_ibfk_1");
-        });
-
-        modelBuilder.Entity<TbFactura>(entity =>
-        {
-            entity.HasKey(e => e.IdFactura).HasName("PRIMARY");
-
-            entity.ToTable("tb_factura");
-
-            entity.HasIndex(e => e.IdConcepto, "id_concepto");
-
-            entity.HasIndex(e => e.IdProveedor, "id_proveedor");
-
-            entity.Property(e => e.IdFactura)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_factura");
-            entity.Property(e => e.Descuento)
-                .HasPrecision(6, 2)
-                .HasColumnName("descuento");
-            entity.Property(e => e.Detalle)
-                .HasMaxLength(60)
-                .HasColumnName("detalle");
-            entity.Property(e => e.Estado)
-                .HasMaxLength(20)
-                .HasColumnName("estado");
-            entity.Property(e => e.Fecha).HasColumnName("fecha");
-            entity.Property(e => e.IdConcepto)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_concepto");
-            entity.Property(e => e.IdProveedor)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_proveedor");
-            entity.Property(e => e.Impuestos)
-                .HasPrecision(6, 2)
-                .HasColumnName("impuestos");
-            entity.Property(e => e.NumeroFactura)
-                .HasMaxLength(30)
-                .HasColumnName("numero_factura");
+                .HasColumnName("tipo_movimiento");
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(300)
+                .HasColumnName("descripcion");
             entity.Property(e => e.Subtotal)
-                .HasPrecision(6, 2)
+                .HasPrecision(10, 2)
                 .HasColumnName("subtotal");
-            entity.Property(e => e.Total)
-                .HasPrecision(6, 2)
-                .HasColumnName("total");
 
-            entity.HasOne(d => d.IdConceptoNavigation).WithMany(p => p.TbFacturas)
-                .HasForeignKey(d => d.IdConcepto)
-                .HasConstraintName("tb_factura_ibfk_2");
+            entity.HasOne(d => d.IdMovimientoNavigation).WithMany(p => p.TbDetalleMovimientos)
+                .HasForeignKey(d => d.IdMovimiento)
+                .HasConstraintName("fk_tb_detalle_movimiento_tb_movimiento");
 
-            entity.HasOne(d => d.IdProveedorNavigation).WithMany(p => p.TbFacturas)
-                .HasForeignKey(d => d.IdProveedor)
-                .HasConstraintName("tb_factura_ibfk_1");
+            entity.HasOne(d => d.IdAcuerdoNavigation).WithMany(p => p.TbDetalleMovimientos)
+                .HasForeignKey(d => d.IdAcuerdo)
+                .HasConstraintName("fk_tb_detalle_movimiento_tb_acuerdo");
+
+
         });
 
-        modelBuilder.Entity<TbFoto>(entity =>
-        {
-            entity.HasKey(e => e.IdFotos).HasName("PRIMARY");
-
-            entity.ToTable("tb_fotos");
-
-            entity.HasIndex(e => e.IdAtractivos, "id_atractivos");
-
-            entity.Property(e => e.IdFotos)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_fotos");
-            entity.Property(e => e.Descripcion)
-                .HasMaxLength(120)
-                .HasColumnName("descripcion");
-            entity.Property(e => e.IdAtractivos)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_atractivos");
-            entity.Property(e => e.RutaFoto)
-                .HasMaxLength(60)
-                .HasColumnName("ruta_foto");
-
-            entity.HasOne(d => d.IdAtractivosNavigation).WithMany(p => p.TbFotos)
-                .HasForeignKey(d => d.IdAtractivos)
-                .HasConstraintName("tb_fotos_ibfk_1");
-        });
-
-        modelBuilder.Entity<TbInformeEconomico>(entity =>
-        {
-            entity.HasKey(e => e.IdInformeEconomico).HasName("PRIMARY");
-
-            entity.ToTable("tb_informe_economico");
-
-            entity.HasIndex(e => e.IdActa, "id_acta");
-
-            entity.HasIndex(e => e.IdAsociacion, "id_asociacion");
-
-            entity.Property(e => e.IdInformeEconomico)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_informe_economico");
-            entity.Property(e => e.Estado)
-                .HasMaxLength(30)
-                .HasColumnName("estado");
-            entity.Property(e => e.FechaActualizacion).HasColumnName("fecha_actualizacion");
-            entity.Property(e => e.FechaInforme).HasColumnName("fecha_informe");
-            entity.Property(e => e.IdActa)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_acta");
-            entity.Property(e => e.IdAsociacion)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_asociacion");
-            entity.Property(e => e.TotalEgresos)
-                .HasPrecision(9, 2)
-                .HasColumnName("total_egresos");
-            entity.Property(e => e.TotalIngresos)
-                .HasPrecision(9, 2)
-                .HasColumnName("total_ingresos");
-
-            entity.HasOne(d => d.IdActaNavigation).WithMany(p => p.TbInformeEconomicos)
-                .HasForeignKey(d => d.IdActa)
-                .HasConstraintName("tb_informe_economico_ibfk_1");
-
-            entity.HasOne(d => d.IdAsociacionNavigation).WithMany(p => p.TbInformeEconomicos)
-                .HasForeignKey(d => d.IdAsociacion)
-                .HasConstraintName("tb_informe_economico_ibfk_2");
-        });
-
+        
         modelBuilder.Entity<TbJuntaDirectiva>(entity =>
         {
             entity.HasKey(e => e.IdJuntaDirectiva).HasName("PRIMARY");
@@ -734,20 +449,25 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.PeriodoFin).HasColumnName("periodo_fin");
             entity.Property(e => e.PeriodoInicio).HasColumnName("periodo_inicio");
 
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(100)
+                .HasColumnName("nombre");
+            
+
             entity.HasOne(d => d.IdActaNavigation).WithMany(p => p.TbJuntaDirectivas)
                 .HasForeignKey(d => d.IdActa)
-                .HasConstraintName("tb_junta_directiva_ibfk_2");
+                .HasConstraintName("fk_tb_junta_directiva_tb_acta");
 
             entity.HasOne(d => d.IdAsociacionNavigation).WithOne(p => p.TbJuntaDirectiva)
                 .HasForeignKey<TbJuntaDirectiva>(d => d.IdAsociacion)
-                .HasConstraintName("tb_junta_directiva_ibfk_1");
+                .HasConstraintName("fk_tb_junta_directiva_tb_asociacion");
         });
 
         modelBuilder.Entity<TbMiembrosJuntaDirectiva>(entity =>
         {
             entity.HasKey(e => e.IdMiembrosJuntaDirectiva).HasName("PRIMARY");
 
-            entity.ToTable("tb_miembros_junta_directiva");
+            entity.ToTable("tb_miembro_junta_directiva");
 
             entity.HasIndex(e => e.IdAsociado, "id_asociado");
 
@@ -773,169 +493,18 @@ public partial class ApplicationDbContext : DbContext
 
             entity.HasOne(d => d.IdAsociadoNavigation).WithMany(p => p.TbMiembrosJuntaDirectivas)
                 .HasForeignKey(d => d.IdAsociado)
-                .HasConstraintName("tb_miembros_junta_directiva_ibfk_2");
+                .HasConstraintName("fk_tb_miembros_junta_directiva_tb_asociado");
 
             entity.HasOne(d => d.IdJuntaDirectivaNavigation).WithMany(p => p.TbMiembrosJuntaDirectivas)
                 .HasForeignKey(d => d.IdJuntaDirectiva)
-                .HasConstraintName("tb_miembros_junta_directiva_ibfk_1");
+                .HasConstraintName("fk_tb_miembro_junta_directiva_tb_junta_directiva");
 
             entity.HasOne(d => d.IdPuestoNavigation).WithMany(p => p.TbMiembrosJuntaDirectivas)
                 .HasForeignKey(d => d.IdPuesto)
-                .HasConstraintName("tb_miembros_junta_directiva_ibfk_3");
+                .HasConstraintName("fk_tb_miembros_junta_directiva_tb_puesto");
         });
 
-        modelBuilder.Entity<TbMovimientoEgreso>(entity =>
-        {
-            entity.HasKey(e => e.IdMovimientosEgresos).HasName("PRIMARY");
 
-            entity.ToTable("tb_movimiento_egresos");
-
-            entity.HasIndex(e => e.IdActa, "id_acta");
-
-            entity.HasIndex(e => e.IdAsociacion, "id_asociacion");
-
-            entity.HasIndex(e => e.IdCheque, "id_cheque");
-
-            entity.HasIndex(e => e.IdCuenta, "id_cuenta");
-
-            entity.HasIndex(e => e.IdFactura, "id_factura");
-
-            entity.HasIndex(e => e.IdTipoMovimiento, "id_tipo_movimiento");
-
-            entity.Property(e => e.IdMovimientosEgresos)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_movimientos_egresos");
-            entity.Property(e => e.Estado)
-                .HasMaxLength(20)
-                .HasColumnName("estado");
-            entity.Property(e => e.Fecha).HasColumnName("fecha");
-            entity.Property(e => e.IdActa)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_acta");
-            entity.Property(e => e.IdAsociacion)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_asociacion");
-            entity.Property(e => e.IdCheque)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_cheque");
-            entity.Property(e => e.IdCuenta)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_cuenta");
-            entity.Property(e => e.IdFactura)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_factura");
-            entity.Property(e => e.IdTipoMovimiento)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_tipo_movimiento");
-
-            entity.HasOne(d => d.IdActaNavigation).WithMany(p => p.TbMovimientoEgresos)
-                .HasForeignKey(d => d.IdActa)
-                .HasConstraintName("tb_movimiento_egresos_ibfk_5");
-
-            entity.HasOne(d => d.IdAsociacionNavigation).WithMany(p => p.TbMovimientoEgresos)
-                .HasForeignKey(d => d.IdAsociacion)
-                .HasConstraintName("tb_movimiento_egresos_ibfk_2");
-
-            entity.HasOne(d => d.IdChequeNavigation).WithMany(p => p.TbMovimientoEgresos)
-                .HasForeignKey(d => d.IdCheque)
-                .HasConstraintName("tb_movimiento_egresos_ibfk_4");
-
-            entity.HasOne(d => d.IdCuentaNavigation).WithMany(p => p.TbMovimientoEgresos)
-                .HasForeignKey(d => d.IdCuenta)
-                .HasConstraintName("tb_movimiento_egresos_ibfk_3");
-
-            entity.HasOne(d => d.IdFacturaNavigation).WithMany(p => p.TbMovimientoEgresos)
-                .HasForeignKey(d => d.IdFactura)
-                .HasConstraintName("tb_movimiento_egresos_ibfk_6");
-
-            entity.HasOne(d => d.IdTipoMovimientoNavigation).WithMany(p => p.TbMovimientoEgresos)
-                .HasForeignKey(d => d.IdTipoMovimiento)
-                .HasConstraintName("tb_movimiento_egresos_ibfk_1");
-        });
-
-        modelBuilder.Entity<TbMovimientoIngreso>(entity =>
-        {
-            entity.HasKey(e => e.IdMovimientoIngresos).HasName("PRIMARY");
-
-            entity.ToTable("tb_movimiento_ingresos");
-
-            entity.HasIndex(e => e.IdActa, "id_acta");
-
-            entity.HasIndex(e => e.IdAsociacion, "id_asociacion");
-
-            entity.HasIndex(e => e.IdCliente, "id_cliente");
-
-            entity.HasIndex(e => e.IdConcepto, "id_concepto");
-
-            entity.HasIndex(e => e.IdCuenta, "id_cuenta");
-
-            entity.HasIndex(e => e.IdDocumento, "id_documento");
-
-            entity.HasIndex(e => e.IdTipoMovimientos, "id_tipo_movimientos");
-
-            entity.Property(e => e.IdMovimientoIngresos)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_movimiento_ingresos");
-            entity.Property(e => e.Detalle)
-                .HasMaxLength(300)
-                .HasColumnName("detalle");
-            entity.Property(e => e.Estado)
-                .HasMaxLength(20)
-                .HasColumnName("estado");
-            entity.Property(e => e.FechaComprobante).HasColumnName("fecha_comprobante");
-            entity.Property(e => e.IdActa)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_acta");
-            entity.Property(e => e.IdAsociacion)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_asociacion");
-            entity.Property(e => e.IdCliente)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_cliente");
-            entity.Property(e => e.IdConcepto)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_concepto");
-            entity.Property(e => e.IdCuenta)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_cuenta");
-            entity.Property(e => e.IdDocumento)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_documento");
-            entity.Property(e => e.IdTipoMovimientos)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_tipo_movimientos");
-            entity.Property(e => e.Monto)
-                .HasPrecision(9, 2)
-                .HasColumnName("monto");
-
-            entity.HasOne(d => d.IdActaNavigation).WithMany(p => p.TbMovimientoIngresos)
-                .HasForeignKey(d => d.IdActa)
-                .HasConstraintName("tb_movimiento_ingresos_ibfk_7");
-
-            entity.HasOne(d => d.IdAsociacionNavigation).WithMany(p => p.TbMovimientoIngresos)
-                .HasForeignKey(d => d.IdAsociacion)
-                .HasConstraintName("tb_movimiento_ingresos_ibfk_2");
-
-            entity.HasOne(d => d.IdClienteNavigation).WithMany(p => p.TbMovimientoIngresos)
-                .HasForeignKey(d => d.IdCliente)
-                .HasConstraintName("tb_movimiento_ingresos_ibfk_5");
-
-            entity.HasOne(d => d.IdConceptoNavigation).WithMany(p => p.TbMovimientoIngresos)
-                .HasForeignKey(d => d.IdConcepto)
-                .HasConstraintName("tb_movimiento_ingresos_ibfk_4");
-
-            entity.HasOne(d => d.IdCuentaNavigation).WithMany(p => p.TbMovimientoIngresos)
-                .HasForeignKey(d => d.IdCuenta)
-                .HasConstraintName("tb_movimiento_ingresos_ibfk_3");
-
-            entity.HasOne(d => d.IdDocumentoNavigation).WithMany(p => p.TbMovimientoIngresos)
-                .HasForeignKey(d => d.IdDocumento)
-                .HasConstraintName("tb_movimiento_ingresos_ibfk_6");
-
-            entity.HasOne(d => d.IdTipoMovimientosNavigation).WithMany(p => p.TbMovimientoIngresos)
-                .HasForeignKey(d => d.IdTipoMovimientos)
-                .HasConstraintName("tb_movimiento_ingresos_ibfk_1");
-        });
 
         modelBuilder.Entity<TbProveedor>(entity =>
         {
@@ -948,9 +517,18 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.IdProveedor)
                 .HasColumnType("int(11)")
                 .HasColumnName("id_proveedor");
-            entity.Property(e => e.Cedula)
-                .HasMaxLength(30)
-                .HasColumnName("cedula");
+            entity.Property(e => e.IdAsociacion)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_asociacion");
+            entity.Property(e => e.CedulaJudirica)
+                .HasMaxLength(50)
+                .HasColumnName("cedula_juridica");
+            entity.Property(e => e.NombreContacto)
+                .HasMaxLength(50)
+                .HasColumnName("nombre_contacto");
+            entity.Property(e => e.CedulaContacto)
+                .HasMaxLength(50)
+                .HasColumnName("cedula_contacto");
             entity.Property(e => e.Correo)
                 .HasMaxLength(120)
                 .HasColumnName("correo");
@@ -963,19 +541,16 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Fax)
                 .HasMaxLength(60)
                 .HasColumnName("fax");
-            entity.Property(e => e.IdAsociacion)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_asociacion");
-            entity.Property(e => e.Nombre)
+            entity.Property(e => e.Nombre_Empresa)
                 .HasMaxLength(30)
-                .HasColumnName("nombre");
+                .HasColumnName("nombre_empresa");
             entity.Property(e => e.Telefono)
                 .HasMaxLength(25)
                 .HasColumnName("telefono");
 
             entity.HasOne(d => d.IdAsociacionNavigation).WithMany(p => p.TbProveedors)
                 .HasForeignKey(d => d.IdAsociacion)
-                .HasConstraintName("tb_proveedor_ibfk_1");
+                .HasConstraintName("fk_tb_proveedor_tb_asociacion");
         });
 
         modelBuilder.Entity<TbPuesto>(entity =>
@@ -990,31 +565,21 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Nombre)
                 .HasMaxLength(60)
                 .HasColumnName("nombre");
-        });
-
-        modelBuilder.Entity<TbTipoMovimiento>(entity =>
-        {
-            entity.HasKey(e => e.IdTipoMovimiento).HasName("PRIMARY");
-
-            entity.ToTable("tb_tipo_movimiento");
-
-            entity.Property(e => e.IdTipoMovimiento)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_tipo_movimiento");
             entity.Property(e => e.Descripcion)
-                .HasMaxLength(60)
+                .HasMaxLength(255)
                 .HasColumnName("descripcion");
         });
 
+
+
         modelBuilder.Entity<TbUsuario>(entity =>
         {
-            entity.HasKey(e => e.IdUser).HasName("PRIMARY");
+            entity.HasKey(e => e.IdUsuario).HasName("PRIMARY");
 
             entity.ToTable("tb_usuario");
 
-            entity.HasIndex(e => e.IdRol, "id_rol");
 
-            entity.Property(e => e.IdUser)
+            entity.Property(e => e.IdUsuario)
                 .HasColumnType("int(11)")
                 .HasColumnName("id_user");
             entity.Property(e => e.Contraseña)
@@ -1029,29 +594,185 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.NombreUsuario)
                 .HasMaxLength(50)
                 .HasColumnName("nombre_usuario");
-            entity.Property(e => e.IdRol)
-                .HasMaxLength(50)
-                .HasColumnName("id_rol");
-
-            entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.TbUsuarios)
-                .HasForeignKey(d => d.IdRol)
-                .HasConstraintName("tb_usuario_tb_rol_ibfk_1");
+            entity.Property(e => e.Rol)
+                .HasMaxLength(30)
+                .HasColumnName("rol");
 
         });
 
-        modelBuilder.Entity<TbRol>(entity =>
+        modelBuilder.Entity<TbMovimiento>(entity =>
         {
-            entity.HasKey(e => e.IdRol).HasName("PRIMARY");
+            entity.HasKey(e => e.IdMovimiento);
+            entity.ToTable("tb_movimiento");
 
-            entity.ToTable("tb_rol");
+            entity.HasIndex(e => e.IdAsociacion, "id_asociacion");
+            entity.HasIndex(e => e.IdAsociado, "id_asociado");
+            entity.HasIndex(e => e.IdCategoriaMovimiento, "id_categoria_movimiento");
+            entity.HasIndex(e => e.IdProyecto, "id_proyecto");
+            entity.HasIndex(e => e.IdCuenta, "id_cuenta");
+            entity.HasIndex(e => e.IdActa, "id_acta");
+            entity.HasIndex(e => e.IdProveedor, "id_proveedor");
+            entity.HasIndex(e => e.IdCliente, "id_cliente");
 
-            entity.Property(e => e.IdRol)
+            entity.Property(e => e.TipoMovimiento)
+                .HasMaxLength(20)
+                .HasColumnName("tipo_movimiento")
+                .HasDefaultValue("Ingresos");
+            entity.Property(e => e.IdAsociacion)
                 .HasColumnType("int(11)")
-                .HasColumnName("id_rol");
+                .HasColumnName("id_asociacion");
+            entity.Property(e => e.IdAsociado)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_asociado");
+            entity.Property(e => e.FuenteFondo)
+                .HasMaxLength(20)
+                .HasColumnName("fuente_fondo")
+                .HasDefaultValue("Fondos Propios");
+            entity.Property(e => e.IdCategoriaMovimiento)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_categoria_movimiento");
+            entity.Property(e => e.IdProyecto)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_proyecto");
+            entity.Property(e => e.IdCuenta)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_cuenta");
+            entity.Property(e => e.IdActa)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_acta");
+            entity.Property(e => e.IdProveedor)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_proveedor");
+            entity.Property(e => e.IdCliente)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_cliente");
             entity.Property(e => e.Descripcion)
-                .HasMaxLength(50)
+                .HasMaxLength(300)
                 .HasColumnName("descripcion");
+            entity.Property(e => e.MetodoPago)
+                .HasMaxLength(20)
+                .HasColumnName("metodo_pago")
+                .HasDefaultValue("Efectivo");
+            entity.Property(e => e.FechaMovimiento)
+                .HasColumnName("fecha_movimiento");
+            entity.Property(e => e.SubtotalMovido)
+                .HasPrecision(10, 2)
+                .HasColumnName("subtotal_movido");
+            entity.Property(e => e.MontoTotalMovido)
+                .HasPrecision(10, 2)
+                .HasColumnName("monto_total_movido");
+            entity.Property(e => e.Estado)
+                .HasMaxLength(20)
+                .HasColumnName("estado");
+
+
+
+            entity.HasOne(d => d.IdAsociacionNavigation).WithMany(p => p.TbMovimientos)
+                .HasForeignKey(d => d.IdAsociacion)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(d => d.IdCuentaNavigation)
+                .WithMany(p => p.TbMovimientos)
+                .HasForeignKey(d => d.IdCuenta)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(d => d.IdActaNavigation)
+                .WithMany(p => p.TbMovimientos)
+                .HasForeignKey(d => d.IdActa)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(d => d.IdProveedorNavigation)
+                .WithMany(p => p.TbMovimientos)
+                .HasForeignKey(d => d.IdProveedor)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(d => d.IdClienteNavigation)
+                .WithMany(p => p.TbMovimientos)
+                .HasForeignKey(d => d.IdCliente)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(d => d.IdCategoriaMovimientoNavigation)
+                .WithMany(p => p.TbMovimientos)
+                .HasForeignKey(d => d.IdCategoriaMovimiento)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(d => d.IdProyectoNavigation)
+                .WithMany(p => p.TbMovimientos)
+                .HasForeignKey(d => d.IdProyecto)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(d => d.IdAsociadoNavigation)
+                .WithMany(p => p.TbMovimientos)
+                .HasForeignKey(d => d.IdAsociado)
+                .OnDelete(DeleteBehavior.SetNull);
         });
+
+        modelBuilder.Entity<TbProyecto>(entity =>
+        {
+            entity.HasKey(e => e.IdProyecto).HasName("PRIMARY");
+            entity.ToTable("tb_proyecto");
+            entity.HasIndex(e => e.IdAsociacion, "id_asociacion");
+            entity.HasIndex(e => e.IdActa, "id_acta");
+            entity.HasIndex(e => e.IdAsociado, "id_asociado");
+
+            entity.Property(e => e.IdProyecto)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_proyecto");
+            entity.Property(e => e.IdAsociacion)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_asociacion");
+            entity.Property(e => e.IdActa)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_acta");
+            entity.Property(e => e.IdAsociado)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_asociado");
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(100)
+                .HasColumnName("nombre");
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(500)
+                .HasColumnName("descripcion");
+            entity.Property(e => e.MontoTotalDestinado)
+                .HasPrecision(10, 2)
+                .HasColumnName("monto_total_destinado");
+
+            entity.HasOne(d => d.IdAsociacionNavigation).WithMany(p => p.TbProyectos)
+                .HasForeignKey(d => d.IdAsociacion)
+                .HasConstraintName("fk_tb_proyecto_tb_asociacion");
+
+            entity.HasOne(d => d.IdActaNavigation).WithMany(p => p.TbProyectos)
+                .HasForeignKey(d => d.IdActa)
+                .HasConstraintName("fk_tb_proyecto_tb_acta");
+
+            entity.HasOne(d => d.IdAsociadoNavigation).WithMany(p => p.TbProyectos)
+                .HasForeignKey(d => d.IdAsociado)
+                .HasConstraintName("fk_tb_proyecto_tb_asociado");
+        });
+
+        modelBuilder.Entity<TbActaAsistencia>(entity =>
+        {
+            entity.HasKey(e => e.IdActaAsistencia).HasName("PRIMARY");
+
+            entity.ToTable("tb_acta_asistencia");
+
+            entity.HasIndex(e => e.IdAsociado, "id_asociado");
+
+            entity.Property(e => e.IdActaAsistencia)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_acta_asistencia");
+            entity.Property(e => e.IdAsociado)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_asociado");
+
+            entity.HasOne(d => d.IdAsociadoNavigation).WithMany(p => p.TbActaAsistencias)
+                .HasForeignKey(d => d.IdAsociado)
+                .HasConstraintName("fk_tb_acta_asistencia_tb_asociado");
+
+        });
+
+
+
 
         OnModelCreatingPartial(modelBuilder);
     }

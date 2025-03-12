@@ -15,7 +15,9 @@ public partial class TbJuntaDirectiva
 
     public DateOnly? PeriodoFin { get; set; }
 
-    public string? Estado { get; set; }
+    public string? Nombre { get; set; } = null!;
+
+    public string? Estado { get; set; } = "Activo";
 
     public virtual TbActum? IdActaNavigation { get; set; }
 

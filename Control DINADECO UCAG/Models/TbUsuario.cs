@@ -5,17 +5,20 @@ namespace Control_DINADECO_UCAG.Models;
 
 public partial class TbUsuario
 {
-    public int IdUser { get; set; }
+    public int IdUsuario { get; set; }
 
-    public string? NombreUsuario { get; set; }
+    public string NombreUsuario { get; set; } = null!;
 
-    public string? Contraseña { get; set; }
+    public string Contraseña { get; set; } = null!;
 
-    public int IdRol { get; set; }
+    public string Rol { get; set; } = "Admin";
 
-    public string? Correo { get; set; }
+    public string Correo { get; set; } = null!;
 
-    public string? Estado { get; set; }
+    public string Estado { get; set; } = "Activo";
 
-    public virtual TbRol? IdRolNavigation { get; set; }
+    public virtual ICollection <TbAsociado> TbAsociados { get; set; } = new List<TbAsociado>();
+
+
+
 }

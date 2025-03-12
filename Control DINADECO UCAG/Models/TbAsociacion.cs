@@ -13,45 +13,46 @@ public partial class TbAsociacion
 
     public string Nombre { get; set; } = null!;
 
-    public DateOnly? FechaConstitucion { get; set; }
+    public DateOnly FechaConstitucion { get; set; }
 
-    public string? Telefono { get; set; }
+    public string Telefono { get; set; } = null!;
 
-    public string? Fax { get; set; }
+    public string Fax { get; set; }
 
-    public string? Correo { get; set; }
+    public string Correo { get; set; } = null!;
 
-    public string? Provincia { get; set; }
+    public string Provincia { get; set; } = null!;
 
-    public string? Canton { get; set; }
+    public string Canton { get; set; } = null!;
 
-    public string? Distrito { get; set; }
+    public string Distrito { get; set; } = null!;
 
-    public string? Pueblo { get; set; }
+    public string Pueblo { get; set; } = null!;
 
-    public string? Direccion { get; set; }
+    public string Direccion { get; set; } = null!;
 
-    public string? Estado { get; set; }
+    public string Descripcion { get; set; } = null!;
+
+    public string Estado { get; set; } = "Activo";
 
     public virtual ICollection<TbActum> TbActa { get; set; } = new List<TbActum>();
 
-    public virtual ICollection<TbAsociacionWeb> TbAsociacionWebs { get; set; } = new List<TbAsociacionWeb>();
 
     public virtual ICollection<TbAsociado> TbAsociados { get; set; } = new List<TbAsociado>();
 
-    public virtual ICollection<TbConcepto> TbConceptos { get; set; } = new List<TbConcepto>();
 
-    public virtual ICollection<TbCuentum> TbCuenta { get; set; } = new List<TbCuentum>();
+    public virtual ICollection<TbCuenta> TbCuenta { get; set; } = new List<TbCuenta>();
 
-    public virtual ICollection<TbDocumento> TbDocumentos { get; set; } = new List<TbDocumento>();
+    public virtual ICollection<TbCategoriaMovimiento> TbCategoriaMovimientos { get; set; } =  new List <TbCategoriaMovimiento>();
 
-    public virtual ICollection<TbInformeEconomico> TbInformeEconomicos { get; set; } = new List<TbInformeEconomico>();
+    public virtual ICollection<TbCliente> TbClientes { get; set; } = new List<TbCliente>();
 
     public virtual TbJuntaDirectiva? TbJuntaDirectiva { get; set; }
 
-    public virtual ICollection<TbMovimientoEgreso> TbMovimientoEgresos { get; set; } = new List<TbMovimientoEgreso>();
-
-    public virtual ICollection<TbMovimientoIngreso> TbMovimientoIngresos { get; set; } = new List<TbMovimientoIngreso>();
 
     public virtual ICollection<TbProveedor> TbProveedors { get; set; } = new List<TbProveedor>();
+
+    public virtual ICollection<TbMovimiento> TbMovimientos { get; set; } = new List<TbMovimiento>();
+
+    public virtual ICollection<TbProyecto> TbProyectos { get; set; } = new List<TbProyecto>();
 }

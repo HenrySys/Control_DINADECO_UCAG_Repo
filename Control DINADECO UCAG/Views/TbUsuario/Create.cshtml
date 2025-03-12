@@ -153,7 +153,7 @@
 						<input type="text" class="form-control" placeholder="Nombre de usuario" asp-for="Usuario.NombreUsuario  " required />
 						<input type="password" class="form-control" placeholder="Contraseña" asp-for="Usuario.Contraseña" required />
 
-						<select asp-for="Usuario.IdRol" class="form-control" required>
+						<select asp-for="Usuario.Rol" class="form-control" required>
 							<option value="">Seleccione un rol</option>
 							@foreach (var rol in Model.Roles)
 
